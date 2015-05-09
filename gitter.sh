@@ -1,8 +1,16 @@
 #!/bin/bash
 
-URL=$1
-REPO="$(basename $1)"
-REPONAME="${REPO%.git}"
-RESPONDENT=$2
+INPUT=respondents.csv
 
-git clone $1 && tar -czf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
+[ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
+
+(tail -n +2 $INPUT ; echo )| while IFS=, read RESPONDENT REPOSITORY
+do
+	echo "Fetching $REPOSITORY"
+	REPO="$(basename $REPOSITORY)"
+
+	REPONAME="${REPO%.git}"
+
+	git clone $REPOSITORY && tar -czf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
+
+done
