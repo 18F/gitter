@@ -5,4 +5,4 @@ REPO="$(basename $1)"
 REPONAME="${REPO%.git}"
 RESPONDENT=$2
 
-git clone $1 && tar -cf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
+git clone $1 && tar -czf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
