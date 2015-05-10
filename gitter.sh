@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INPUT=respondents.csv
+INPUT=$1 || respondents.csv # Get csv from command line or default to respondents.csv 
 
 [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
 
