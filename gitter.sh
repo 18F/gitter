@@ -13,4 +13,9 @@ do
 
 	git clone $REPOSITORY && tar -czf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
 
+	if [ $TEST ]; then
+		s3cmd --config tests/s3.conf mb s3://test
+		s3cmd --config tests/s3.conf put responses/18f.tar.gz s3://test 
+	fi
+
 done
