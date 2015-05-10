@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ ! -d /tmp/fakes3_root ]]; then
-  mkdir /mnt/fakes3_root || return 1
+  mkdir /tmp/fakes3_root || return 1
 fi
 
 case $1 in

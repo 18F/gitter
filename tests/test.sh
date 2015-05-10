@@ -14,6 +14,10 @@ testLoadedToS3 ()
 
 oneTimeSetUp() {
 	bash lib/fakes3init.sh start
+	sleep 2
+	export TEST=True
+
+	s3cmd --config tests/s3.conf mb s3://test
 	bash gitter.sh tests/test.csv
 }
 
