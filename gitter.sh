@@ -13,6 +13,9 @@ do
 	REPONAME="${REPO%.git}"
 
 	git clone $REPOSITORY && tar -czf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
-	s3cmd "$TESTCONFIG" --no-mime-magic --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
-
+	if [ $CONFIG ]; then
+		s3cmd "$CONFIG" --no-mime-magic --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
+	else
+		s3cmd --no-mime-magic --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
+	fi	
 done
