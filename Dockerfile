@@ -1,7 +1,7 @@
 # VERSION               0.0.1
 
 # USAGE
-# docker run --rm -e "ACCESS_KEY=CHANGEME" -e "SECRET_KEY=CHANGME" -v ~/path/to/csv/directory:/csv gitter-docker /csv/csvfile.csv bucketname
+# docker run --rm -e "ACCESS_KEY=CHANGEME" -e "SECRET_KEY=CHANGME" -v /path/to/csv/directory:/csv gitter-docker /csv/csvfile.csv bucketname
 
 FROM      ubuntu:14.04
 MAINTAINER V. David Zvenyach <vladlen.zvenyach@gsa.gov>
