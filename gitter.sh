@@ -16,6 +16,7 @@ do
 	if [ $CONFIG ]; then
 		s3cmd "$CONFIG" --no-mime-magic --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
 	else
-		s3cmd --no-mime-magic --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
-	fi	
+		test -n "$ACCESS_KEY" -a -n "$SECRET_KEY" || { echo "ERROR: Please set ACCESS_KEY and SECRET_KEY environment variables"; exit 99; }
+		s3cmd --config=s3cfg.conf --no-mime-magic --access_key="$ACCESS_KEY" --secret_key="$SECRET_KEY" --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
+	fi
 done
