@@ -1,14 +1,18 @@
 #! /bin/bash
 # Usage: ./tests.sh
 
-testFileExists()
+testFilesExist()
 {
-	assertTrue 'The files were not found' "[ -f 'responses/18f.tar.gz' ]"
+	assertTrue 'The readme was not found' "[ -f 'responses/18f/readme.md' ]"
+	assertTrue 'The repository was not found' "[ -f 'responses/18f/18f.tar.gz' ]"
 }
 
 testLoadedToS3 ()
 {
-	HITS="$(s3cmd --config tests/s3.conf ls s3://test | grep -c 18f.tar.gz )"
+	HITS="$(s3cmd --config tests/s3.conf ls s3://test/18f/ | grep -c 18f.tar.gz )"
+	assertEquals 1 $HITS
+	
+	HITS="$(s3cmd --config tests/s3.conf ls s3://test/18f/ | grep -c readme.md )"
 	assertEquals 1 $HITS
 }
 
@@ -22,10 +26,8 @@ oneTimeSetUp() {
 }
 
 oneTimeTearDown () {
-	rm responses/18f.tar.gz
-	s3cmd --config tests/s3.conf del s3://test/18f.tar.gz
-	s3cmd --config tests/s3.conf rb s3://test
-	cat /tmp/fakes3.pid | xargs kill -9
+	rm -rf responses/18f
+	rm -rf /tmp/fakes3_root/test
 }
 
 . lib/shunit2
