@@ -15,7 +15,7 @@ do
 	mkdir -p responses/$RESPONDENT
 
 	git clone $REPOSITORY && \
-		find . -iname readme.* -exec cp $REPONAME/{} responses/$RESPONDENT/readme.md \; && \
+		find $REPONAME -iname readme.* -exec cp {} responses/$RESPONDENT/readme.md \; && \
 		tar -czf responses/$RESPONDENT/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
 	if [ $CONFIG ]; then
 		s3cmd "$CONFIG" --no-mime-magic --disable-multipart put -r -p responses/$RESPONDENT/ s3://$BUCKET/$RESPONDENT/
