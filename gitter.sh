@@ -1,5 +1,4 @@
 #!/bin/bash
-shopt nocaseglob
 
 INPUT=${1-respondents.csv} # Get csv from command line or default to respondents.csv 
 BUCKET=${2-test} #Get S3 bucket name from command line or default to test
@@ -16,7 +15,7 @@ do
 	mkdir -p responses/$RESPONDENT
 
 	git clone $REPOSITORY && \
-		cp $REPONAME/README.md responses/$RESPONDENT/readme.md && \
+		find . -iname readme.* -exec cp $REPONAME/{} responses/$RESPONDENT/readme.md \; && \
 		tar -czf responses/$RESPONDENT/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
 	if [ $CONFIG ]; then
 		s3cmd "$CONFIG" --no-mime-magic --disable-multipart put -r -p responses/$RESPONDENT/ s3://$BUCKET/$RESPONDENT/
