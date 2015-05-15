@@ -12,11 +12,15 @@ do
 
 	REPONAME="${REPO%.git}"
 
-	git clone $REPOSITORY && tar -czf responses/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
+	mkdir -p responses/$RESPONDENT
+
+	git clone $REPOSITORY && \
+		find $REPONAME -iname readme.* -exec cp {} responses/$RESPONDENT/readme.md \; && \
+		tar -czf responses/$RESPONDENT/$RESPONDENT.tar.gz $REPONAME && rm -rf $REPONAME
 	if [ $CONFIG ]; then
-		s3cmd "$CONFIG" --no-mime-magic --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
+		s3cmd "$CONFIG" --no-mime-magic --disable-multipart put -r -p responses/$RESPONDENT/ s3://$BUCKET/$RESPONDENT/
 	else
 		test -n "$ACCESS_KEY" -a -n "$SECRET_KEY" || { echo "ERROR: Please set ACCESS_KEY and SECRET_KEY environment variables"; exit 99; }
-		s3cmd --config=s3cfg.conf --no-mime-magic --access_key="$ACCESS_KEY" --secret_key="$SECRET_KEY" --disable-multipart put responses/$RESPONDENT.tar.gz s3://$BUCKET
+		s3cmd --config=s3cfg.conf --no-mime-magic --access_key="$ACCESS_KEY" --secret_key="$SECRET_KEY" --disable-multipart put -r -p responses/$RESPONDENT/ s3://$BUCKET/$RESPONDENT/
 	fi
 done
